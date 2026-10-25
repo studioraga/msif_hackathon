@@ -71,3 +71,20 @@ The fixed-weight variant has 8,175 (approximately 6.60%) fewer generic cells tha
 `python3 scripts/node1_evidence.py --build build/demo` reads actual simulator/Yosys logs, requires PASS and zero Yosys `check` problems, and emits `build/demo/node1_evidence.json` with tool versions and log hashes. It fails if evidence is missing. This is a local evidence summary, **not** an approval or signature.
 
 Baseline-freeze policy: freeze M0, M1 and the limited M2/M5/M7-lite implementation after reproducing the verification on Node1 and inspecting the local report. Keep formal proofs, technology-mapped PPA, real ROM macro, governance signature/approval and full source-model quantization as open gates. Existing milestones M3/M4/M6/M8–M11 are not completed.
+
+## Planned M2.1 completion gate
+
+M2.1 extends (does not replace) v0.1.2 with exhaustive 4096-pair **RTL** simulation and scalar SAT equivalence. Only tag after Node1 logs satisfy `docs/M2.1-Formal-Equivalence.md`. Full GEMV formal proof is a later gate.
+
+```mermaid
+gitGraph
+    commit id: "M0-M5 v0.1.2" tag: "msif-m0-m1-m2-m5-v0.1.2"
+    branch feature-m2-formal
+    checkout feature-m2-formal
+    commit id: "M2.1 RTL exhaustive + scalar SAT"
+    checkout main
+    merge feature-m2-formal
+```
+
+
+> **M2.1 validation correction (2026-10-25):** M2.1 is pending requalification after false-positive simulation PASS was identified; preserve baseline v0.1.2 unchanged.

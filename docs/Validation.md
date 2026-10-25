@@ -44,3 +44,10 @@ The fixed-weight variant has 8,175 (approximately 6.60%) fewer generic cells tha
 `python3 scripts/node1_evidence.py --build build/demo` reads actual simulator/Yosys logs, requires PASS and zero Yosys `check` problems, and emits `build/demo/node1_evidence.json` with tool versions and log hashes. It fails if evidence is missing. This is a local evidence summary, **not** an approval or signature.
 
 Baseline-freeze policy: freeze M0, M1 and the limited M2/M5/M7-lite implementation after reproducing the verification on Node1 and inspecting the local report. Keep formal proofs, technology-mapped PPA, real ROM macro, governance signature/approval and full source-model quantization as open gates. Existing milestones M3/M4/M6/M8–M11 are not completed.
+
+## M2.1 additional strict gate
+
+Run `set -o pipefail; ./scripts/verify_m21.sh 2>&1 | tee logs/m21_node1.log`. Require 4096 scalar RTL pairs and Yosys SAT `SUCCESS!`, in addition to the original `./scripts/verify.sh`. See [M2.1 evidence](M2.1-Formal-Equivalence.md). This has not yet been validated on Node1.
+
+
+> **M2.1 validation correction (2026-10-25):** M2.1 mandatory: no simulator ERROR/FATAL/FAIL/WARNING lines; one exhaustive PASS marker, fresh evidence JSON, Yosys SAT SUCCESS and independent Verilator lint review. Previous M2.1 evidence is invalid due to Icarus assertion diagnostics.
