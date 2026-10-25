@@ -34,3 +34,11 @@ On Ubuntu Node1 run `./scripts/verify_m21.sh`; see [M2.1 prerequisites and accep
 
 
 > **M2.1 validation correction (2026-10-25):** Rerun `./scripts/verify_m21.sh` after correction and check `build/m21/exhaustive.log` for errors. Never approve stale evidence.
+
+## M2.2 small-GEMV verification candidate
+
+The bounded 2×4 GEMV arithmetic miter, generated RTL sequential tests, fail-closed Verilator lint, independent simulator checks, and evidence acceptance criteria are specified in [M2.2 — Small GEMV and Sequential Verification](M2.2-Small-GEMV-and-Sequential-Verification.md). On pages located within `docs/`, use the relative link `M2.2-Small-GEMV-and-Sequential-Verification.md`. Run `./scripts/verify_m22.sh` on Node1 only after M2.1 has been merged and revalidated. This milestone is not automatically accepted on source generation alone.
+
+
+### M2.2 reset-testbench erratum (2026-10-25)
+The first Node1 M2.2 simulation stopped at `async reset failed` because the testbench initialized active-low reset to zero without generating a falling edge. The corrected testbench initializes `rst_n=1`, then explicitly drives `rst_n=0` and waits for nonblocking assignments to settle before checking reset outputs. Repeat all three variant simulations and proof/lint gates; earlier M2.2 evidence is not acceptable. This is a testbench correction, not a change to the accepted M2.1 RTL compiler.
