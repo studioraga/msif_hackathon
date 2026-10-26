@@ -5,3 +5,8 @@ __pycache__/
 .venv/
 *.pem
 *.sig
+
+*.pt
+*.pth
+evidence/m5.1-environment/pytorch-candidate/*.log
+validation/m5.1/pytorch/*.log
