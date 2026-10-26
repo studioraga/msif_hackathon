@@ -130,3 +130,9 @@ The next prototype gate is [M7.1 controlled A/B/C synthesis](M7.1-Controlled-Syn
 ## M7.1-L — optional standard-cell Liberty mapping qualification (2026-10-26)
 
 **Milestone gates:** M7.1-G = PASS (generic), M7.1-L = PASS (exploratory Liberty), M7.1-LQ = PENDING (mapped-netlist inventory/equivalence), G1 = PENDING (reviewer authorization), M7.2 = PENDING (physical implementation). These statuses do not assert a Git merge or release tag. See [Detailed M7.1 report](M7.1-Liberty-Mapping-Qualification.md).
+
+## M7.1-LQ Node1 bounded verification — 26 October 2026
+
+**PASS:** mapped A/B/C standard-cell inventories and 260-vector gate-level regression per architecture on Node1 (746/690/746 mapped cells). See [canonical LQ evidence, incident history and limitations](M7.1-LQ-Mapped-Netlist-Verification.md). Full sequential formal proof, physical PPA and governed release authorization remain **NOT VERIFIED**. Continue with the document-first [M7.2/G1 engineering handoff](M7.2-G1-Engineering-Handoff.md); do not claim those milestones complete or production-qualified.
+
+**Git boundary:** LQ source remains a feature-branch candidate until a reviewed PR is merged and a post-merge tag is created. Preserve the existing GitHub Mermaid `gitGraph` above as the historical/proposed architecture; do not invent an LQ merge.

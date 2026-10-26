@@ -130,3 +130,9 @@ The next prototype gate is [M7.1 controlled A/B/C synthesis](docs/M7.1-Controlle
 - **G1: PENDING** — governed release authorization and independent receipts.
 
 Yosys 0.33, OpenROAD Flow Scripts revision `64939f3`, and pinned Liberty SHA-256 `ec0e1067a35c8bf20b11e58d1e8ac53326067e4dac84a125cc1b917a3518d0d9` were used. For the 2×4 fixture, Liberty-reported cell-area sums for A/B/C were **6,707.6832 / 6,593.8240 / 6,707.6832 µm²**. These are synthesis-stage standard-cell estimates, not placed/routed area, timing, power, qualified SRAM/ROM or release approval. See the [Liberty execution record](docs/M7.1-Liberty-Mapping-Qualification.md) and [controlled synthesis comparison](docs/M7.1-Controlled-Synthesis-Comparison.md).
+
+## M7.1-LQ Node1 bounded gate-level qualification — 26 October 2026
+
+**PASS for bounded tests only:** A/B/C mapped netlists exported; Liberty cell inventories have zero unknown types; **260 vectors per variant** passed Icarus gate-level simulation (mapped cell counts **746 / 690 / 746**). Source and artifact hashes were audited against the uploaded Node1 evidence. The **34-test Python suite passed**. Full sequential formal equivalence, physical PPA, physical memory macros and G1 release approval remain **NOT VERIFIED**.
+
+See the canonical [LQ verification report](docs/M7.1-LQ-Mapped-Netlist-Verification.md) and [M7.2/G1 engineering handoff](docs/M7.2-G1-Engineering-Handoff.md). The architectural research specification remains unchanged. Source code is a feature-branch candidate until manually reviewed, merged and tagged; do not interpret Node1 verification as a GitHub release.

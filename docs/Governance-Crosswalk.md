@@ -74,3 +74,7 @@ The next prototype gate is [M7.1 controlled A/B/C synthesis](M7.1-Controlled-Syn
 ## M7.1-L — optional standard-cell Liberty mapping qualification (2026-10-26)
 
 **Governance boundary:** M7.1-G and exploratory M7.1-L PASS do not imply release candidate authorization. Artifact hash checking, an optional signature and synthesis PASS do not substitute for PAG bounded execution, EvidenceLedger receipts, independent reviewer approval and Node2 verification (G1 still PENDING). See [Experimental/approval separation](M7.1-Liberty-Mapping-Qualification.md).
+
+## M7.1-LQ Node1 bounded verification — 26 October 2026
+
+**PASS:** mapped A/B/C standard-cell inventories and 260-vector gate-level regression per architecture on Node1 (746/690/746 mapped cells). See [canonical LQ evidence, incident history and limitations](M7.1-LQ-Mapped-Netlist-Verification.md). Full sequential formal proof, physical PPA and governed release authorization remain **NOT VERIFIED**. Continue with the document-first [M7.2/G1 engineering handoff](M7.2-G1-Engineering-Handoff.md); do not claim those milestones complete or production-qualified.
