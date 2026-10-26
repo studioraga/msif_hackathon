@@ -109,3 +109,24 @@ See `docs/M5.1-PyTorch-Environment-Qualification.md`. The external
 `/tmp/msif-pytorch-2.14.0-cu130` qualification and all local evidence are
 separate from the project lock. No GPU/CUDA validation was performed by
 creating this dependency patch.
+
+
+## M7.1 synthesis comparison candidate
+
+The next prototype gate is [M7.1 controlled A/B/C synthesis](docs/M7.1-Controlled-Synthesis-Comparison.md) (see `docs/M7.1-Controlled-Synthesis-Comparison.md` from documents). Run `./scripts/verify_m71.sh` after all older milestone regressions. Generic cell counts and optional Liberty-mapped cell counts do not establish timing, routed area, power or release approval. PAG EvidenceLedger and human approval integration remain planned.
+
+
+## M7.1-L — optional standard-cell Liberty mapping qualification (2026-10-26)
+
+**M7.1-G PASS; M7.1-L exploratory PASS; M7.1-LQ pending.** See [Liberty mapping experimental record](docs/M7.1-Liberty-Mapping-Qualification.md).
+
+
+### M7.1 synthesis qualification — 26 October 2026
+
+- **M7.1-G: PASS** — controlled generic Yosys synthesis (2×4).
+- **M7.1-L: PASS** — exploratory SKY130 HD TT Liberty mapping (2×4).
+- **M7.1-LQ: PENDING** — exported mapped-netlist audit and independent equivalence.
+- **M7.2: PENDING** — SDC/STA, LEF, placement/routing and physical PPA qualification.
+- **G1: PENDING** — governed release authorization and independent receipts.
+
+Yosys 0.33, OpenROAD Flow Scripts revision `64939f3`, and pinned Liberty SHA-256 `ec0e1067a35c8bf20b11e58d1e8ac53326067e4dac84a125cc1b917a3518d0d9` were used. For the 2×4 fixture, Liberty-reported cell-area sums for A/B/C were **6,707.6832 / 6,593.8240 / 6,707.6832 µm²**. These are synthesis-stage standard-cell estimates, not placed/routed area, timing, power, qualified SRAM/ROM or release approval. See the [Liberty execution record](docs/M7.1-Liberty-Mapping-Qualification.md) and [controlled synthesis comparison](docs/M7.1-Controlled-Synthesis-Comparison.md).
