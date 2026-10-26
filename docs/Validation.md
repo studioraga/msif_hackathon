@@ -78,3 +78,9 @@ The next prototype gate is [M7.1 controlled A/B/C synthesis](M7.1-Controlled-Syn
 ## M7.1-L — optional standard-cell Liberty mapping qualification (2026-10-26)
 
 **Independent LQ acceptance (PENDING):** export complete mapped Verilog and Yosys JSON, inventory every instantiated cell against the selected Liberty, reject unresolved internal cells/blackboxes, check signed arithmetic and reset/valid behavior against the behavioral RTL, preserve proofs and SHA-256 receipts; fail closed on any missing result. See [LQ verification gates](M7.1-Liberty-Mapping-Qualification.md).
+
+## M7.1-LQ Node1 bounded verification — 26 October 2026
+
+**PASS:** mapped A/B/C standard-cell inventories and 260-vector gate-level regression per architecture on Node1 (746/690/746 mapped cells). See [canonical LQ evidence, incident history and limitations](M7.1-LQ-Mapped-Netlist-Verification.md). Full sequential formal proof, physical PPA and governed release authorization remain **NOT VERIFIED**. Continue with the document-first [M7.2/G1 engineering handoff](M7.2-G1-Engineering-Handoff.md); do not claim those milestones complete or production-qualified.
+
+Run `python3 scripts/m71_lq_audit.py --build build/m71_liberty` to audit saved evidence hashes; also execute Node1 negative configuration tests separately. LQ PASS is bounded simulation, not universal sequential proof.
