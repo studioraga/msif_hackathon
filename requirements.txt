@@ -1,0 +1,5 @@
+# Core runtime only; preferred reproducible installation: uv sync --locked --group gpu
+# GPU torch is intentionally isolated in pyproject.toml [dependency-groups].gpu
+# Do NOT pip install -r requirements.txt as a substitute for locked GPU qualification.
+-e .
+numpy==2.5.4

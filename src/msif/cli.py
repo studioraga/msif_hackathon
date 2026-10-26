@@ -3,6 +3,7 @@ from pathlib import Path
 from .core import fixture,write_build,inference
 from .governance import validate_manifest,sign_via_pag,verify_via_pag
 from .simulation import simulate
+from .tensor_import import build_from_tensor
 
 def main():
  p=argparse.ArgumentParser();sub=p.add_subparsers(dest='action',required=True)
@@ -10,9 +11,13 @@ def main():
  v=sub.add_parser('verify');v.add_argument('--out',default='build/demo');v.add_argument('--pubkey');v.add_argument('--signature')
  s=sub.add_parser('sign');s.add_argument('--out',default='build/demo');s.add_argument('--private-key',required=True);s.add_argument('--public-key',required=True)
  y=sub.add_parser('synthesize');y.add_argument('--out',default='build/demo')
+ imp=sub.add_parser('import-tensor');imp.add_argument('--checkpoint',required=True);imp.add_argument('--tensor-key');imp.add_argument('--scale',type=float,required=True);imp.add_argument('--out',default='build/m51');imp.add_argument('--bias-json')
  t=sub.add_parser('sim');t.add_argument('--out',default='build/demo');t.add_argument('--vectors',type=int,default=24)
  args=p.parse_args()
  if args.action=='build':print(json.dumps(write_build(fixture(args.m,args.k,args.seed),args.out),indent=2))
+ elif args.action=='import-tensor':
+  bias=json.loads(Path(args.bias_json).read_text()) if args.bias_json else None
+  print(json.dumps(build_from_tensor(args.checkpoint,args.scale,args.out,args.tensor_key,bias),indent=2))
  elif args.action=='sign':print(sign_via_pag(args.out,args.private_key,args.public_key))
  elif args.action=='verify':
   validate_manifest(args.out)

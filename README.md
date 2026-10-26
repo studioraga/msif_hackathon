@@ -81,3 +81,31 @@ The bounded 2×4 GEMV arithmetic miter, generated RTL sequential tests, fail-clo
 
 ### M2.2 reset-testbench erratum (2026-10-25)
 The first Node1 M2.2 simulation stopped at `async reset failed` because the testbench initialized active-low reset to zero without generating a falling edge. The corrected testbench initializes `rst_n=1`, then explicitly drives `rst_n=0` and waits for nonblocking assignments to settle before checking reset outputs. Repeat all three variant simulations and proof/lint gates; earlier M2.2 evidence is not acceptable. This is a testbench correction, not a change to the accepted M2.1 RTL compiler.
+
+## M5.1 — PyTorch tensor import candidate
+
+[M5.1 Tensor Ingestion](docs/M5.1-Quantized-Tensor-Ingestion.md) defines deterministic per-tensor signed INT4 quantization, row-major ordering, SHA-256 source provenance, explicit scale and fail-closed overflow. Execute `./scripts/verify_m51.sh` in addition to earlier milestone gates. This candidate is **not yet Node1-qualified** and does not imply production-model quantization accuracy, PDK PPA, or governance approval.
+
+
+## M5.1 PyTorch and NumPy dependency management (Node1)
+
+**Authoritative dependency definition:** `pyproject.toml` plus committed `uv.lock`;
+`requirements.txt` is a core-only pip compatibility file, not the GPU wheel lock.
+Python 3.12 x86_64, NumPy 2.5.4 and GPU-group PyTorch 2.14.0 from the
+explicit `pytorch-cu130` index are the tested *candidate selection*. The
+project must not claim GPU admission until the locked `.venv` passes the
+Blackwell sm_120 native-kernel, no-PTX-JIT, and custom-extension gates.
+
+```bash
+uv --version
+uv lock                              # resolve and create uv.lock on networked Node1
+uv sync --locked --group gpu         # reproducible .venv; refuses stale lock
+uv run --locked --group gpu python -c 'import numpy, torch; print(numpy.__version__, torch.__version__, torch.version.cuda)'
+./scripts/validate/pytorch/qualify_project_environment.sh
+./scripts/verify_m51.sh
+```
+
+See `docs/M5.1-PyTorch-Environment-Qualification.md`. The external
+`/tmp/msif-pytorch-2.14.0-cu130` qualification and all local evidence are
+separate from the project lock. No GPU/CUDA validation was performed by
+creating this dependency patch.
