@@ -10,3 +10,27 @@ __pycache__/
 *.pth
 evidence/m5.1-environment/pytorch-candidate/*.log
 validation/m5.1/pytorch/*.log
+
+# local terminal sessions
+tmux-client-*.log
+tmux-server-*.log
+
+# M7.2 generated activity/EDA evidence and local credentials (2026-11-02)
+*.vcd
+*.saif
+*.vvp
+*.fst
+*.odb
+*.spef
+*.sdf
+*.gds
+*.gdsii
+*.oas
+*.o
+*.a
+*.so
+*.key
+*.p12
+*.pfx
+.env
+.env.*

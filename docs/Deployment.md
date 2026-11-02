@@ -1,5 +1,11 @@
 # Deployment
 
+## M7.2 Node1 research execution and artifact lifecycle — 2 November 2026
+
+For the seven recorded commits, `cd` to repository root, activate `.venv` (Python `>=3.12,<3.13`), set `PYTHONPATH="$PWD/src:$PWD/scripts"` and `MSIF_ORFS="$HOME/eda/qualified-pdks/OpenROAD-flow-scripts"`, and `source "$MSIF_ORFS/env.sh"`. Confirm ORFS commit and TT Liberty checksum in [Prerequisites](Prerequisites.md#node1-m72-qualified-versus-unqualified-dependencies--2-november-2026). Validate real `SKY130_HD` source with `cells/` and `models/`; never use illustrative `/actual/...` paths.
+
+Use **new timestamped** `build/m72/` evidence destinations on each run; retain nonzero-exit, timeout and rejected receipts. Back up ignored build data and external ORFS results separately from `git diff`/untracked source backups. Do not overwrite historical ODB/SPEF/netlists, use `git clean`, stage binaries, or push/tag from an automation. `RELEASE_BLOCKED_REVIEW_REQUIRED` is a governed refusal to release, not a deployment success. Follow [current milestone gates](Milestones.md#m72-branch-history-and-release-gates--2-november-2026).
+
 Use an isolated checkout, run `./scripts/node1_audit.sh`, then `./scripts/verify.sh`. Do not install dependencies system-wide blindly or modify the original governance tree. Generated artifacts live in `build/`. Use the PAG signing adapter only after separately installing/version-qualifying PAG and provisioning protected keys. No systemd services, external network endpoints or GPUs are needed for the initial deterministic pipeline.
 
 
@@ -65,3 +71,66 @@ The next prototype gate is [M7.1 controlled A/B/C synthesis](M7.1-Controlled-Syn
 ## M7.1-LQ Node1 bounded verification — 26 October 2026
 
 **PASS:** mapped A/B/C standard-cell inventories and 260-vector gate-level regression per architecture on Node1 (746/690/746 mapped cells). See [canonical LQ evidence, incident history and limitations](M7.1-LQ-Mapped-Netlist-Verification.md). Full sequential formal proof, physical PPA and governed release authorization remain **NOT VERIFIED**. Continue with the document-first [M7.2/G1 engineering handoff](M7.2-G1-Engineering-Handoff.md); do not claim those milestones complete or production-qualified.
+
+
+## M7.2 physical-flow implementation boundary — 26 October 2026
+
+**M7.2 opt-in:** configure `MSIF_ORFS` and explicit `MSIF_M72_LICENSE_PVT_REVIEWED=YES`; run `./scripts/verify_m72.sh`, optionally `--dry-run` and `--execute` on Node1. Outputs belong in untracked `build/m72`/`logs`. [Operational runbook](M7.2-Physical-Design-Qualification.md).
+
+## Node1 M7.2 execution state and evidence boundary
+
+See [M7.2 physical runbook](M7.2-Physical-Design-Qualification.md) for the 28 October 2026 programmable-only completed exploratory route, unresolved P2b–P5, warnings and independent A/B/C audit. Do not represent the programmable Make exit 0 as release authorization.
+
+
+## M7.2 P2b–P5 implementation continuation (28 October 2026)
+
+This section is additive to the accepted P0/P1 baseline and does not authorize a commit, tag, or release.
+
+```mermaid
+flowchart TD
+  L[Accepted M7.1-LQ A/B/C netlist + SHA-256 + 260-vector evidence] --> P2[P2b exact hash-pinned netlist preparation]
+  P2 --> N[Compatibility-only signed declaration normalization or explicit no-op]
+  N --> I[OpenROAD read_verilog / Liberty / LEF / OpenDB import]
+  I --> E{Structural import and provenance pass?}
+  E -->|No| X[BLOCKED]
+  E -->|Yes| Q[Independent connectivity and sequential equivalence: NOT VERIFIED]
+  B[Original M7.1 RTL and shared P0/P1 SDC] --> R[Exploratory ORFS RTL synthesis for A/B/C]
+  R --> F[P3 floorplan + PDN + placement + CTS + detailed route]
+  F --> T[P4 extracted SPEF and corner-labelled STA]
+  T --> C[P5 comparable area/timing and qualified activity-based power]
+  C --> D{Independent report reviews complete?}
+  D -->|No| X
+  Q --> D
+  D -->|Yes| G[G1 authorization, independent separate gate]
+```
+
+### Implementation modules and status
+
+- `scripts/m72_exact_lq_import.py`: hash-pin exact accepted `build/m71_liberty/m71_lq/msif_*_mapped.v` into isolated P2b candidates, preserve raw files, permit only reviewed signed-port compatibility transforms (including explicit no-op) and optionally test import into OpenDB; **does not implement post-import formal equivalence or a complete ORFS place-and-route handoff**.
+- `scripts/m72/m72_normalize.py`: previously verified programmable declaration transform, now also emits a fail-closed identity/no-op receipt when no signed declarations exist. Prevents valid fixed/ROM structural netlists from being rejected solely due to absence of signed ports.
+- `scripts/m72_report_review.py`: collects A/B/C final ODB/GDS/SPEF/SDC, detailed-route report and finish report, hashes artifacts, extracts labelled timing *observations*, and refuses missing evidence. A report-present result is explicitly not signoff.
+- `scripts/m72_physical_audit.py`: retains a conservative three-architecture inventory with no signoff from existence alone.
+
+### Node1 execution sequence
+
+```bash
+cd ~/dev/pub/ai-sys1/msif-hack/push/msif_hackathon
+source .venv/bin/activate
+export MSIF_ORFS="$HOME/eda/qualified-pdks/OpenROAD-flow-scripts"
+export PYTHONPATH="$PWD/src:$PWD/scripts"
+python3 -m unittest discover -s tests -v
+PYTHONPATH="$PWD/scripts/m72" python3 -m unittest discover -s scripts/m72 -p 'test_m72_normalize.py' -v
+python3 scripts/m72_exact_lq_import.py --orfs "$MSIF_ORFS" --out build/m72/p2b-exact-lq
+# Only after reviewing the manifest and no stale output directory:
+# python3 scripts/m72_exact_lq_import.py --orfs "$MSIF_ORFS" --out build/m72/p2b-exact-lq-execute --execute
+# Independently perform the normalizer ORFS route on fixed and rom; use separate FLOW_VARIANTs.
+python3 scripts/m72_report_review.py --flow "$MSIF_ORFS/flow" --out build/m72/p3p5-report-ledger.json
+```
+
+### Outstanding hard gates
+
+- **P2b:** OpenDB import with matching accepted hashes is an *import experiment*. Cell-pin/bit-accurate structural preservation, sequential equivalence, and a fully integrated exact-LQ physical implementation remain separate, unimplemented closure gates.
+- **P3:** A is routed experimentally; B/C must be routed. Independently review legal placement, PDN connectivity, detailed-route DRC, antenna checks, macro inclusion, and reproducible ODB/GDS against reports.
+- **P4:** Timing reports from a single TT corner and relaxed research SDC cannot establish multi-corner signoff. Review all setup/hold paths, unconstrained endpoints, reset recovery/removal, RCX corner provenance and additional PVT views where available.
+- **P5:** Report standard-cell (not die/core) area and distinguish core area, utilization, clock and I/O delay assumptions. Power without explicit VCD/SAIF/activity provenance is an estimate only. A/C arrays are not qualified SRAM/ROM macros.
+- **G1:** Release approval and Node2 independent receipts remain `NOT_VERIFIED`.
